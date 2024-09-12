@@ -1,2 +1,2 @@
-# vs-repos
+# edu-repo
 educational
