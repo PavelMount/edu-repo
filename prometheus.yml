@@ -5,7 +5,7 @@ global:
   # scrape_timeout is set to the global default (10s).
   external_labels:
     server_name: prometheus_main
-     
+
 remote_write:
   - url: http://127.0.0.1:8428/api/v1/write
     queue_config:
@@ -13,6 +13,11 @@ remote_write:
       capacity: 20000
       max_shards: 30
 
+    write_relabel_configs:
+      - source_labels: [__name__]
+        target_label: site
+        replacement: prod
+        action: replace
 # Alertmanager configuration
 alerting:
   alertmanagers:
@@ -42,9 +47,6 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ["localhost:9100"]
-    metric_relabel_configs:
-      - target_label: site
-        replacement: prod
 
   #mysql_exporter
   - job_name: "mysqld_exporter"
